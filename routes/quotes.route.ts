@@ -1,6 +1,7 @@
 import { Type } from '@sinclair/typebox'
-import QuoteService from "../services/quotes.service";
+import { QuoteService } from "../services/quotes.service";
 import { Container } from "typedi";
+import logger from "../utils/logger";
 
 const querySchema = Type.Object({
     amount: Type.Number(),
@@ -14,9 +15,11 @@ export default async function routes(server: any) {
         schema: {
             querystring: querySchema
         },
-        handler: async (request : any, reply: any) => {
+        handler: async (request: any, reply: any) => {
             const { amount, chainIdFrom, chainIdTo, currencyCode } = request.query;
-            reply.send({ amount, chainIdFrom, chainIdTo, currencyCode });
-          }
+            const quoteService = await Container.get(QuoteService);
+            const bestQuote = await quoteService.getBestQuote({ amount, chainIdFrom, chainIdTo, currencyCode })
+            reply.send(bestQuote);
+        }
     });
 }

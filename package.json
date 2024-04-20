@@ -13,8 +13,11 @@
   "license": "ISC",
   "dependencies": {
     "@sinclair/typebox": "^0.32.21",
+    "axios": "^1.6.8",
     "fastify": "^4.26.2",
     "nodemon": "^3.1.0",
+    "pino-pretty": "^11.0.0",
+    "reflect-metadata": "^0.2.2",
     "typedi": "^0.10.0"
   },
   "devDependencies": {

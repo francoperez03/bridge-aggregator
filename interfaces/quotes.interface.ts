@@ -5,9 +5,9 @@ export interface IQuoteProvider {
     chainIdTo,
     currencyCode,
   }: {
-    amount: number,
-    chainIdFrom: number,
-    chainIdTo: number,
-    currencyCode: string,
+    amount: number;
+    chainIdFrom: number;
+    chainIdTo: number;
+    currencyCode: string;
   }): any;
 }

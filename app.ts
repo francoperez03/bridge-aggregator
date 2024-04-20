@@ -1,32 +1,41 @@
 
+import "reflect-metadata";
 import { fastify } from 'fastify';
 import pino from 'pino';
 import quotesRoutes from './routes/quotes.route';
-
-const server = fastify({
-    logger: pino({ level: 'info' })
-});
+import setupProviders from "./providers";
+import logger from "./utils/logger";
 
 
-server.setErrorHandler(function (error, request, reply) {
-  if (error.validation) {
-    const message = error.validation.map(e => `${e.instancePath} ${e.message}`).join(', ');
-    reply.status(400).send({
-      statusCode: 400,
-      error: "Bad Request",
-      message: "Validation failed: " + message
-    });
-  } else {
-    reply.send(error);
-  }
-});
+async function startServer() {
+  await setupProviders();
+  const server = fastify({
+      logger: pino({ level: 'info' })
+  });
 
-server.register(quotesRoutes);
 
-server.listen({ port: 3000 }, (err, address) => {
-    if (err) {
-      console.error(err)
-      process.exit(1)
+  server.setErrorHandler(function (error, request, reply) {
+    if (error.validation) {
+      const message = error.validation.map(e => `${e.instancePath} ${e.message}`).join(', ');
+      reply.status(400).send({
+        statusCode: 400,
+        error: "Bad Request",
+        message: "Validation failed: " + message
+      });
+    } else {
+      reply.send(error);
     }
-    console.log(`Server listening at ${address}`)
-})
+  });
+
+  server.register(quotesRoutes);
+
+  server.listen({ port: 3000 }, (err, address) => {
+      if (err) {
+        logger.error(err)
+        process.exit(1)
+      }
+      logger.info(`Server listening at ${address}`)
+  })
+
+}
+startServer();
