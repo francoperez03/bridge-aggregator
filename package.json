@@ -1,0 +1,26 @@
+{
+  "name": "bridge-aggregator2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -w",
+    "dev": "nodemon app.ts",
+    "start": "node build/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sinclair/typebox": "^0.32.21",
+    "fastify": "^4.26.2",
+    "nodemon": "^3.1.0",
+    "typedi": "^0.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/pino": "^7.0.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
