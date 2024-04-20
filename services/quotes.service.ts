@@ -9,9 +9,9 @@ export class QuoteService {
     private liFiQuoteProvider: IQuoteProvider
   ) {}
 
-  async getBestQuote(params: { amount: number; chainIdFrom: number; chainIdTo: number; currencyCode: string; }) {
+  async getBestQuote(amount: number, fromChain: string | number, toChain: string | number, tokenCode: string) {
     try {
-      const quotes = this.liFiQuoteProvider.getQuote(params)
+      const quotes = this.liFiQuoteProvider.getQuote(amount, fromChain, toChain, tokenCode )
       return quotes;
     } catch (e) {
       logger.error((e as Error).message);

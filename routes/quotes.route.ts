@@ -5,9 +5,9 @@ import logger from "../utils/logger";
 
 const querySchema = Type.Object({
     amount: Type.Number(),
-    chainIdFrom: Type.Integer(),
-    chainIdTo: Type.Integer(),
-    currencyCode: Type.String({ minLength: 3, maxLength: 3 }) // Ejemplo para códigos ISO de 3 letras.
+    fromChain: Type.Union([Type.String(), Type.Integer()]),
+    toChain: Type.Union([Type.String(), Type.Integer()]),
+    tokenCode: Type.String({ minLength: 3, maxLength: 5 })
   });
 
 export default async function routes(server: any) {
@@ -16,9 +16,9 @@ export default async function routes(server: any) {
             querystring: querySchema
         },
         handler: async (request: any, reply: any) => {
-            const { amount, chainIdFrom, chainIdTo, currencyCode } = request.query;
+            const { amount, fromChain, toChain, tokenCode } = request.query;
             const quoteService = await Container.get(QuoteService);
-            const bestQuote = await quoteService.getBestQuote({ amount, chainIdFrom, chainIdTo, currencyCode })
+            const bestQuote = await quoteService.getBestQuote(amount, fromChain, toChain, tokenCode)
             reply.send(bestQuote);
         }
     });

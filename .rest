@@ -1,4 +1,4 @@
 ### GET /quotes
 GET http://localhost:3000/quotes
 ### GET /quotes
-GET http://localhost:3000/quotes?amount=1&chainIdFrom=2&chainIdTo=3&currencyCode=ETH
+GET http://localhost:3000/quotes?amount=1&fromChain=POL&toChain=DAI&tokenCode=USDT
