@@ -3,11 +3,9 @@ import { IQuoteProvider } from '../interfaces/quotes.interface';
 import logger from '../utils/logger';
 
 const BASE_URL = 'https://li.quest/v1'
-
-
 export class LiFiQuoteProvider implements IQuoteProvider {
   
-	async getQuote(amount: number, fromChain: string | number, toChain: string | number, tokenCode: string) {
+	async getQuote(amount: number, fromChain: number, toChain: number, tokenCode: string) {
 		try {
 			const response =  await this.getConnections(fromChain, toChain, tokenCode, tokenCode, 'EVM');
 			const priceTokenOrigin = response.connections[0].fromTokens[0].priceUSD
@@ -21,13 +19,13 @@ export class LiFiQuoteProvider implements IQuoteProvider {
 	}
 
 	private async getConnections(
-		fromChain: string | number,
-		toChain: string | number,
+		fromChain: number,
+		toChain: number,
 		fromToken: string,
 		toToken: string,
 		chainTypes: string
 	) {
-		const result = await axios.get(`${BASE_URL}/connections`, {
+		const { data } = await axios.get(`${BASE_URL}/connections`, {
 			params: {
 				fromChain,
 				toChain,
@@ -36,7 +34,7 @@ export class LiFiQuoteProvider implements IQuoteProvider {
 				chainTypes,
 			},
 		});
-		return result.data;
+		return data;
 	}
 
 	private async getChains() {

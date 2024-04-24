@@ -9,11 +9,13 @@ export class QuoteService {
     private liFiQuoteProvider: IQuoteProvider,
     @Inject("ConnextQuoteProvider")
     private connextQuoteProvider: IQuoteProvider,
+    @Inject("HopQuoteProvider")
+    private hopQuoteProvider: IQuoteProvider,
   ) {}
 
-  async getBestQuote(amount: number, fromChain: string | number, toChain: string | number, tokenCode: string) {
+  async getBestQuote(amount: number, fromChain: number, toChain: number, tokenCode: string) {
     try {
-      const quotes = await this.liFiQuoteProvider.getQuote(amount, fromChain, toChain, tokenCode )
+      const quotes = await this.hopQuoteProvider.getQuote(amount, fromChain, toChain, tokenCode )
       return quotes;
     } catch (e) {
       logger.error((e as Error).message);
