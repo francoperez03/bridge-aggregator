@@ -1,4 +1,4 @@
 ### GET /quotes
 GET http://localhost:3000/quotes
-### GET /quotes
-GET http://localhost:3000/quotes?amount=1&fromChain=POL&toChain=DAI&tokenCode=USDT
+### GET /quotes Bridge USDT from ETH(1) to POL(137)
+GET http://localhost:3000/quotes?amount=100&fromChain=1&toChain=137&tokenCode=USDT

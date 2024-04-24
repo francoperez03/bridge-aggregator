@@ -2,25 +2,13 @@ import axios, { AxiosError } from 'axios';
 import { IQuoteProvider } from '../interfaces/quotes.interface';
 import logger from '../utils/logger';
 
+const BASE_URL = 'https://li.quest/v1'
+
+
 export class LiFiQuoteProvider implements IQuoteProvider {
-	constructor() {}
+  
 	async getQuote(amount: number, fromChain: string | number, toChain: string | number, tokenCode: string) {
 		try {
-			//   const fromChain = 'DAI';
-			//   const fromToken = 'USDC';
-			//   const toChain = 'POL';
-			//   const toToken = 'USDC';
-			//   const fromAmount = '1000000';
-			//   const result = await axios.get('https://li.quest/v1/quote', {
-			//     params: {
-			//         fromChain,
-			//         toChain,
-			//         fromToken,
-			//         toToken,
-			//         fromAmount,
-			//         fromAddress: '0xfd5ffa749a02D92a393327583821E2a38aAEC885',
-			//     }
-			// });
       logger.info({fromChain, toChain, tokenCode, a:'EVM'})
 			return await this.getConnections(fromChain, toChain, tokenCode, tokenCode, 'EVM');
 		} catch (error) {
@@ -36,7 +24,7 @@ export class LiFiQuoteProvider implements IQuoteProvider {
 		toToken: string,
 		chainTypes: string
 	) {
-		const result = await axios.get('https://li.quest/v1/connections', {
+		const result = await axios.get(`${BASE_URL}/connections`, {
 			params: {
 				fromChain,
 				toChain,
@@ -51,7 +39,7 @@ export class LiFiQuoteProvider implements IQuoteProvider {
 	private async getChains() {
 		try {
 			const optionalChainTypes = 'EVM';
-			const result = await axios.get('https://li.quest/v1/chains', {
+			const result = await axios.get(`${BASE_URL}/chains`, {
 				params: { chainTypes: optionalChainTypes },
 			});
 			return result.data;
@@ -65,7 +53,7 @@ export class LiFiQuoteProvider implements IQuoteProvider {
 		try {
 			const optionalChainType = 'EVM';
 			const optionalFilter = ['ETH', 137];
-			const result = await axios.get('https://li.quest/v1/tokens', {
+			const result = await axios.get(`${BASE_URL}/tokens`, {
 				params: {
 					chains: optionalFilter.join(','),
 					chainTypes: optionalChainType,
@@ -79,7 +67,7 @@ export class LiFiQuoteProvider implements IQuoteProvider {
 	}
 
 	private async getToken(chain: number | string, token: string) {
-		const result = await axios.get('https://li.quest/v1/token', {
+		const result = await axios.get(`${BASE_URL}/token`, {
 			params: {
 				chain,
 				token,
@@ -91,7 +79,7 @@ export class LiFiQuoteProvider implements IQuoteProvider {
 	private async getTools() {
 		try {
 			const optionalChainTypes = 'EVM';
-			const result = await axios.get('https://li.quest/v1/tools');
+			const result = await axios.get(`${BASE_URL}/tools`);
 			return result.data;
 		} catch (error) {
 			logger.error((error as AxiosError).message);

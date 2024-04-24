@@ -17,8 +17,10 @@ export default async function routes(server: any) {
         },
         handler: async (request: any, reply: any) => {
             const { amount, fromChain, toChain, tokenCode } = request.query;
+            const fromChainInt = parseInt(fromChain, 10)
+            const toChainInt = parseInt(toChain, 10)
             const quoteService = await Container.get(QuoteService);
-            const bestQuote = await quoteService.getBestQuote(amount, fromChain, toChain, tokenCode)
+            const bestQuote = await quoteService.getBestQuote(amount, fromChainInt, toChainInt, tokenCode)
             reply.send(bestQuote);
         }
     });

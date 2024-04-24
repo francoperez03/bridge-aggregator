@@ -6,3 +6,8 @@ export interface IQuoteProvider {
     tokenCode: string
   ): any;
 }
+
+
+export interface QuoteResponse {
+  amountReceived: string
+}

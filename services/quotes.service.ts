@@ -6,12 +6,14 @@ import { IQuoteProvider } from "../interfaces/quotes.interface";
 export class QuoteService {
   constructor(
     @Inject("LiFiQuoteProvider")
-    private liFiQuoteProvider: IQuoteProvider
+    private liFiQuoteProvider: IQuoteProvider,
+    @Inject("ConnextQuoteProvider")
+    private connextQuoteProvider: IQuoteProvider,
   ) {}
 
   async getBestQuote(amount: number, fromChain: string | number, toChain: string | number, tokenCode: string) {
     try {
-      const quotes = this.liFiQuoteProvider.getQuote(amount, fromChain, toChain, tokenCode )
+      const quotes = await this.connextQuoteProvider.getQuote(amount, fromChain, toChain, tokenCode )
       return quotes;
     } catch (e) {
       logger.error((e as Error).message);
