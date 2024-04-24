@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import { IQuoteProvider, QuoteResponse } from '../interfaces/quotes.interface';
 import logger from '../utils/logger';
 import { SdkConfig, create } from '@connext/sdk';
-import { mapSymbolToContractAddress } from '../utils/token-addresses';
+import { getTokenAddress } from '../utils/token-addresses';
 
 const BASE_URL = '';
 export class ConnexteQuoteProvider implements IQuoteProvider {
@@ -38,7 +38,7 @@ export class ConnexteQuoteProvider implements IQuoteProvider {
 			const response = await sdkBase.calculateAmountReceived(
 				sdkBase.chainIdToDomain(fromChain).toString(),
 				sdkBase.chainIdToDomain(toChain).toString(),
-				mapSymbolToContractAddress(tokenCode),
+				getTokenAddress(tokenCode, fromChain),
 				amount.toString(),
 				false,
 				true

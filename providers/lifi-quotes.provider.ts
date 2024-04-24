@@ -9,8 +9,11 @@ export class LiFiQuoteProvider implements IQuoteProvider {
   
 	async getQuote(amount: number, fromChain: string | number, toChain: string | number, tokenCode: string) {
 		try {
-      logger.info({fromChain, toChain, tokenCode, a:'EVM'})
-			return await this.getConnections(fromChain, toChain, tokenCode, tokenCode, 'EVM');
+			const response =  await this.getConnections(fromChain, toChain, tokenCode, tokenCode, 'EVM');
+			const priceTokenOrigin = response.connections[0].fromTokens[0].priceUSD
+			const priceTokenDestination = response.connections[0].toTokens[0].priceUSD
+			const amountReceived = (amount * priceTokenOrigin) / priceTokenDestination;
+			return { amountReceived }
 		} catch (error) {
 			logger.error((error as AxiosError).message);
 			throw error;

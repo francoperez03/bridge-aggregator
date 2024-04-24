@@ -13,7 +13,7 @@ export class QuoteService {
 
   async getBestQuote(amount: number, fromChain: string | number, toChain: string | number, tokenCode: string) {
     try {
-      const quotes = await this.connextQuoteProvider.getQuote(amount, fromChain, toChain, tokenCode )
+      const quotes = await this.liFiQuoteProvider.getQuote(amount, fromChain, toChain, tokenCode )
       return quotes;
     } catch (e) {
       logger.error((e as Error).message);
