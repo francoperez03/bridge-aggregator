@@ -3,6 +3,8 @@ import { IQuoteProvider, QuoteResponse } from '../interfaces/quotes.interface';
 import logger from '../utils/logger';
 import { SdkConfig, create } from '@connext/sdk';
 import { getTokenAddress } from '../utils/token-addresses';
+import { CacheManager } from '../utils/cache';
+import { BigNumberish }  from 'ethers';
 
 const BASE_URL = '';
 export class ConnexteQuoteProvider implements IQuoteProvider {
@@ -26,15 +28,35 @@ export class ConnexteQuoteProvider implements IQuoteProvider {
 		},
 	};
 
-	constructor() {}
+    private cache: CacheManager;
+
+    constructor() {
+        this.cache = new CacheManager();
+    }
+
+	private getCacheKey(fromChain: number, toChain: number, tokenCode: string): string {
+        return `${fromChain}-${toChain}-${tokenCode}`;
+    }
+
+	private calculateAmountReceived(amount: number, estimatedRate: number): number {
+        return amount * estimatedRate;
+    }
+
 	async getQuote(
 		amount: number,
 		fromChain: number,
 		toChain: number,
 		tokenCode: string
-	): Promise<QuoteResponse> {
+	): Promise<any> {
+		const cacheKey = this.getCacheKey(fromChain, toChain, tokenCode);
 		try {
 			const { sdkBase } = await create(this.sdkConfig);
+			const cachedData = this.cache.getFromCache(cacheKey);
+			if (cachedData) {
+				logger.info('HIT!');
+				return { amountReceived: this.calculateAmountReceived(amount, cachedData) };
+			}
+
 			const response = await sdkBase.calculateAmountReceived(
 				sdkBase.chainIdToDomain(fromChain).toString(),
 				sdkBase.chainIdToDomain(toChain).toString(),
@@ -43,7 +65,6 @@ export class ConnexteQuoteProvider implements IQuoteProvider {
 				false,
 				true
 			);
-
 			return { amountReceived: response.amountReceived.toString() };
 		} catch (error) {
 			logger.error((error as AxiosError).message);
