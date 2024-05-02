@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { IQuoteProvider } from '../interfaces/quotes.interface';
 import logger from '../utils/logger';
 import { CacheManager } from '../utils/cache';
+import { BigNumberish } from 'ethers';
 
 const BASE_URL = 'https://api.hop.exchange/v1'
 export class HopQuoteProvider implements IQuoteProvider {
@@ -49,8 +50,15 @@ export class HopQuoteProvider implements IQuoteProvider {
                     network: 'mainnet'
                 },
             });
-            this.cache.setCache(cacheKey, data.estimatedRecieved/amount)
-			return { amountReceived: data.estimatedRecieved }
+            const estimatedReceived = BigInt(data.estimatedReceived);
+            const amountIn = BigInt(data.amountIn);
+            if (amountIn === 0n) {
+                throw new Error("amountIn is zero, cannot perform division");
+            }
+            const result = estimatedReceived / amountIn
+            console.log(data)
+            this.cache.setCache(cacheKey, result)
+			return { amountReceived: result }
 		} catch (error) {
 			logger.error((error as AxiosError).message);
 			throw error;

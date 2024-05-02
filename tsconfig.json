@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     /* Language and Environment */
-    "target": "es2017",                                /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "target": "ES2020",                                /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     /* Modules */
     "esModuleInterop": true, // fixes some issues TS originally had with the ES6 spec where TypeScript treats CommonJS/AMD/UMD modules similar to ES6 module
     "moduleResolution": "node", // Pretty much always node for modern JS. Other option is "classic"
